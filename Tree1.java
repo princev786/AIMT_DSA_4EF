@@ -67,9 +67,46 @@ public class Tree1 {
         }
         return root;
     }
+    boolean isPathExist(Node root,int target){
+        if(root == null) return false;
+        if(root.left == null && root.right ==null && root.data == target){
+            return true;
+        }
+        int rsum = target - root.data;
+        return isPathExist(root.left,rsum) || isPathExist(root.right, rsum);
+    }
+    static ArrayList<Integer> hasPath(Node root,int target){
+        ArrayList<Integer> res = findPath(root,target,new ArrayList<Integer>(),new ArrayList<Integer>());
+        return res;
+    }
+    static ArrayList<Integer> findPath(Node root,int target,ArrayList<Integer> res,ArrayList<Integer> path){
+        if(root == null) return res;
+        if(root.left == null && root.right==null && root.data == target){
+            path = new ArrayList<>(res);
+            path.add(root.data);
+            System.out.println(path);
+            // return path;
+        }
+        res.add(root.data);
+        findPath(root.left, target-root.data, res,path);
+        findPath(root.right, target-root.data, res,path);
+        res.remove(res.size()-1);
+        return path;
+    }
+
+    static boolean isIdentical(Node root1,Node root2){
+        if(root1 == null && root2 == null) return true;
+        if(root1 == null || root2==null) return false;
+
+        if(root1.data != root2.data) return false;
+
+        return isIdentical(root1.left, root2.left) || isIdentical(root1.right, root2.right);
+    }
     public static void main(String[] args) {
-        Node root = buildTree(new Integer[]{1,2,3,6,4,5,null});
-        preOrder(root);
+        Node root = buildTree(new Integer[]{5,2,3,1,3,4,1,null,null,null,3});
+        ArrayList<Integer> path = hasPath(root, 12);
+        // System.out.println(path);
+        // preOrder(root);
         // System.out.println();
         // inOrder(root);
         // System.out.println();
